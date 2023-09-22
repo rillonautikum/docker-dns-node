@@ -1,0 +1,23 @@
+{
+  "name": "docker-dns-node",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "dependencies": {
+    "dns2": "^2.1.0",
+    "dockerode": "^3.3.5",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/dockerode": "^3.3.19",
+    "@types/node": "^20.6.3",
+    "jasmine": "^5.1.0"
+  }
+}
