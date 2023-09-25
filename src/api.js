@@ -19,16 +19,14 @@ if (!isMainThread) {
             if (!e.length) return;
 
             const type = "data";
-            
-            let payload = e.filter(container => {
-                // console.log(container);
-                return (Boolean(container.Labels["com.docker-dns.enabled"]) || container.Labels["com.docker-dns.enabled"] === "")
-            }).map(container => {
+
+            let payload = e.filter(isIncluded).map(container => {
                 // console.log(Object.keys(container.Labels));
                 // return container;
-                return extract(container.Labels);
+                const zone = container.Labels["com.docker-dns.domain"];
+                return extract(zone, container.Labels);
             });
-            
+
             // hash each container config
             let calcHash = hashEntries(payload);
             if (calcHash != lastHash) {
@@ -45,7 +43,7 @@ if (!isMainThread) {
     }, 1000);
 
     parentPort.on("message", msg => {
-        
+
         switch (msg) {
             case "exit":
                 console.debug("Stopping API Server");
@@ -61,6 +59,13 @@ function hashEntries(data) {
     return createHash("sha256").update(json).digest("hex");
 }
 
+function isIncluded(container) {
+    return (
+        (Boolean(container.Labels["com.docker-dns.enabled"]) || container.Labels["com.docker-dns.enabled"] === "")
+        && (Boolean(container.Labels["com.docker-dns.domain"]) || container.Labels["com.docker-dns.domain"] !== "")
+        )
+}
+
 export function getDockerSocket(url) {
     // URL.
     let dockerUri = new URL.urlToHttpOptions(url);
@@ -68,7 +73,6 @@ export function getDockerSocket(url) {
         ...dockerUri
     });
 }
-
 
 export default {
     worker: null,

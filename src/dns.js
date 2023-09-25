@@ -12,18 +12,20 @@ if (!isMainThread) {
             const response = Packet.createResponseFromRequest(request);
             const [question] = request.questions;
             const { name, type } = question;
-
+            console.log("q", name, type);
             let f = dataBuffer.filter((v, i) => {
-                // console.log(type);
-                return (strToPacketType(v.type) == type && v.name == name)
+                //console.log(type, v.type);
+                console.log(type, String(v.name + "." + v.zone));
+                return (strToPacketType(v.type) == type && String(v.name + "." + v.zone) == name)
             });
 
             // console.log(strToPacketType(question));
-            
-            response.answers = f.map((i) => {
-                console.log(strToPacketType(i.type));
+
+            //response.answers = 
+            f.forEach((i) => {
                 // Packet.TYPE.TXT
-                return {
+
+                let data = {
                     name: i.name,
                     type: strToPacketType(i.type),
                     class: Packet.CLASS.IN,
@@ -31,9 +33,11 @@ if (!isMainThread) {
                     address: i.target,
                     target: i.target
                 }
+
+                response.answers.push(data);
             });
             console.log(response.answers);
-            send(response); 
+            send(response);
         }
     });
 
@@ -85,7 +89,22 @@ if (!isMainThread) {
 
     function strToPacketType(t) {
         // let k = Object.keys(Packet.TYPE);
-        return Packet.TYPE[t.toUpperCase()];
+        console.log(Packet.TYPE[t.toUpperCase()], t);
+
+        switch (t) {
+            case "a":
+                return Packet.TYPE.A;
+            case "aaaa":
+                return Packet.TYPE.AAAA;
+            case "cname":
+                return Packet.TYPE.CNAME;
+            case "txt":
+                return Packet.TYPE.TXT;
+            case "mx":
+                return Packet.TYPE.MX;
+            case "srv":
+                return Packet.TYPE.SRV;
+        }
     }
 
     // parentPort.on("")

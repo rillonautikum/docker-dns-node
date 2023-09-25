@@ -1,0 +1,46 @@
+version: "2"
+
+services:
+#  dns:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    cap_add:
+#      - NET_ADMIN
+#    ports:
+#      - 53:53/udp
+#      - 53:53/tcp
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./dnsmasq.d:/etc/dnsmasq.d
+  nginx:
+    image: nginx
+    labels:
+      # adds this container to dns, required for function
+      - com.docker-dns.enabled
+
+      # Sets the parent domain to be appended to resource records name
+      - com.docker-dns.domain=example.net
+
+      # Adds an A Record for this Containers IP Address, can be overridden
+      - com.docker-dns.a.v4-test=10.0.0.1
+
+      # Adds an AAAA Record for this Containers IP Address, can be overridden
+      - com.docker-dns.aaaa.v6-test=::1
+
+      # Adds a CNAME record for the A record, the AAAA record or both. It is required that its parent record exists
+      - com.docker-dns.cname.cname-test=bertram
+
+      # Adds a MX Record for the containers address
+      # - com.docker-dns.mx.test.example.net
+      # - com.docker-dns.srv.test.example.net
+      # Adds a TXT entry at the specified location, "target" is required
+      - com.docker-dns.txt.txt-test=oh lol, i should type something in, oops
+  test:
+    image: nginx
+    labels:
+      - com.docker-dns.enabled
+      - com.docker-dns.a.prod-server01.test.example.net
+      #- com.docker-dns.aaaa.test.example.net
+      - com.docker-dns.cname.service.example.net.quit
+      - com.docker-dns.txt.are.you.sure.you.want.to.quit="Yes please"
