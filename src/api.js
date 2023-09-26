@@ -27,15 +27,18 @@ if (!isMainThread) {
                 return extract(zone, container.Labels);
             });
 
+            
             // hash each container config
             let calcHash = hashEntries(payload);
+            // console.log(calcHash, payload);
             if (calcHash != lastHash) {
+                // console.log("matches", lastHash);
                 // console.log("PAYLOAD", payload);
                 //post new message if hashes dont match
                 //because it indicates an update
                 parentPort.postMessage(JSON.stringify({
                     type,
-                    payload: payload[0],
+                    payload: payload[0] ?? [],
                 }));
                 lastHash = calcHash;
             }

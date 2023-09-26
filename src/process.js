@@ -5,26 +5,17 @@ import tmp from 'tmp';
 import { DnsEntry } from "./parser.js";
 import fs from 'fs';
 import { open } from 'node:fs/promises';
-
+ 
 let exitsignal = {
     "type": "exit"
 };
 
 if (!isMainThread) {
+    //create temporary file
     const tmpobj = tmp.fileSync();
 
+    //start dnsmasq
     let dnsmasq = start_dnsmasq();
-
-    /*parentPort.on("message", (m) => {
-
-        let msg = JSON.parse(m);
-        switch (msg.type) {
-            case "data":
-                //write data to file
-                //restart dnsmasq
-                break;
-        }
-    });*/
 
     parentPort.on("message", msg => {
         let m = JSON.parse(msg);
@@ -98,7 +89,7 @@ export default {
     },
     update: function (data) {
         if (!this.worker) throw new Error("No running worker was found");
-        // console.log(data);
+        console.log(data);
         this.worker.postMessage(JSON.stringify(data));
     }
 }
