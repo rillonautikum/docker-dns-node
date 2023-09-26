@@ -13,12 +13,12 @@ api_worker.on("message", m => {
     }
 });
 
-api_worker.on("exit", console.debug);
+// api_worker.on("exit", console.debug);
 api_worker.on("error", console.error);
 
 //let dns_server = Dns.start();
 let dns_server = Dns.start();
-dns_server.on("exit", console.debug);
+// dns_server.on("exit", console.debug);
 dns_server.on("error", console.error);
 
 process.on("SIGINT", () => {
