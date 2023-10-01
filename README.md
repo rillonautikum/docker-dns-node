@@ -44,9 +44,6 @@ The Application will detect labels automatically and configure a dnsmasq instanc
 |`com.docker-dns.domain`|Parent Domain|any|
 |`com.docker-dns.<type>.<subdomain_name>`|`<type>` = "a", "aaaa", "cname", "mx", "srv", "txt", `<subdomain_name>` = test|This Records content|
 
-
-
-
 <!-- TODO Add Polling Interval to config file -->
 The default Polling Interval for the Docker API is 1 second. You can change this in the Config Array in the `main.rs` file.
 

@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch via NPM",
+            "request": "launch",
+            "runtimeArgs": [
+                "dev"
+            ],
+            "runtimeExecutable": "yarn",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "attachSimplePort": 9229,
+            "type": "node",
+            "restart": true
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Launch Program",

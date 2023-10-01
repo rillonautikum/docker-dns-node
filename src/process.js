@@ -30,9 +30,10 @@ if (!isMainThread) {
                 //write data here
                 console.log("Received Data", m.payload);
                 let config = m.payload.map((v) => {
-                    return v.map(p => {
+                    let g = v[0].map(p => {
                         return DnsEntry.fromObject(p).toDnsmasqSetting();
                     }).join("\n");
+                    return g;
                 }).join("\n");
 
                 console.log("Updating DNS Config");

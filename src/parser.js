@@ -7,6 +7,7 @@ export default (zone, data) => {
     let ips = Object.keys(data.NetworkSettings.Networks).map((k) => {
         return data.NetworkSettings.Networks[k].IPAddress;
     });
+    //console.log(ips);
 
 
     let final = ips.map((ip) => {

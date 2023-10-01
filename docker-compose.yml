@@ -39,8 +39,9 @@ services:
   test:
     image: nginx
     labels:
-      - com.docker-dns.enabled
-      - com.docker-dns.a.prod-server01.test.example.net
+      - com.docker-dns.enabled=true
+      - com.docker-dns.domain=apps.rillo.nautikum
+      - com.docker-dns.a.prod-server01.test
       #- com.docker-dns.aaaa.test.example.net
-      - com.docker-dns.cname.service.example.net.quit
+      - com.docker-dns.cname.service
       - com.docker-dns.txt.are.you.sure.you.want.to.quit="Yes please"

@@ -7,7 +7,8 @@
   "scripts": {
     "test": "jasmine",
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon --inspect=9229 .",
+    "debug:docker": "docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -p 9229:9229 -v /var/run/docker.sock:/var/run/docker.sock -v .:/usr/src/docker-dns-node docker-dns-node yarn dev"
   },
   "dependencies": {
     "dns2": "^2.1.0",
