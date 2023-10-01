@@ -34,7 +34,7 @@ export class DnsEntry {
         this.type = extra?.groups.type;
         this.name = extra?.groups.name;
 
-        if (this.type == "a" || this.type == "aaaa") {
+        if ((this.type == "a" || this.type == "aaaa") && !Boolean(value)) {
             this.target = ip;
         } else {
             this.target = value;
