@@ -1,28 +1,43 @@
 const regex = /com\.docker-dns\.(?<type>a{1,4}|cname|mx|srv|txt)(\.(?<options_index>pref|port|priority))?\.(?<name>.*)/;
 
 export default (zone, data) => {
-    let keys = Object.keys(data);
-    // console.log(keys);
-    let v = keys.filter((v) => {
-        return regex.test(v);
-    }).map((v, i) => {
-        // let value_l = "";
-        // let value_r = data[v];
-        return new DnsEntry(zone, v, data[v]);
+    //console.log(data.NetworkSettings);
+    let keys = Object.keys(data.Labels);
+    //extract IP Addresses here
+    let ips = Object.keys(data.NetworkSettings.Networks).map((k) => {
+        return data.NetworkSettings.Networks[k].IPAddress;
     });
 
-    return v;
+
+    let final = ips.map((ip) => {
+        //console.log(ip);
+        return keys.filter((v) => {
+            return regex.test(v);
+        }).map((v, i) => {
+            // let value_l = "";
+            // let value_r = data[v];
+            return new DnsEntry(zone, v, data.Labels[v], ip);
+        });
+
+    });
+
+    return final;
 }
 
 export class DnsEntry {
-    constructor(zone, key, value) {
+    constructor(zone, key, value, ip) {
         let extra = regex.exec(key);
         this.zone = zone;
 
         // console.log(extra);
         this.type = extra?.groups.type;
         this.name = extra?.groups.name;
-        this.target = value;
+
+        if (this.type == "a" || this.type == "aaaa") {
+            this.target = ip;
+        } else {
+            this.target = value;
+        }
     }
 
     static fromObject(obj) {
@@ -33,7 +48,7 @@ export class DnsEntry {
             target
         } = obj;
 
-        return new DnsEntry(zone, "com.docker-dns." + type + "." + name, target);
+        return new DnsEntry(zone, "com.docker-dns." + type + "." + name, target, target);
     }
 
     toDnsmasqSetting() {
@@ -41,7 +56,7 @@ export class DnsEntry {
             case "a":
             case "aaaa":
                 return `address=/${this.name}.${this.zone}/${this.target}`;
-            
+
             case "cname":
                 return `cname=/${this.name}.${this.zone},${this.target}`;
 

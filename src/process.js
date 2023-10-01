@@ -30,10 +30,13 @@ if (!isMainThread) {
                 //write data here
                 console.log("Received Data", m.payload);
                 let config = m.payload.map((v) => {
-                    return DnsEntry.fromObject(v).toDnsmasqSetting();
+                    return v.map(p => {
+                        return DnsEntry.fromObject(p).toDnsmasqSetting();
+                    }).join("\n");
                 }).join("\n");
 
                 console.log("Updating DNS Config");
+                console.debug(config);
                 clear_file(tmpobj.name).then(() => {
                     fs.writeFileSync(tmpobj.fd, config);
                     //restart dnsmasq
@@ -54,7 +57,7 @@ if (!isMainThread) {
             "--keep-in-foreground",
             "-d",
             "-q",
-            "--port=5354",
+            "--port=" + process.env.DNS_PORT,
             "--conf-file=" + tmpobj.name
         ]);
     }

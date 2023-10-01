@@ -47,13 +47,13 @@ if (!isMainThread) {
 
     server.listen({
         udp: {
-            port: 5354,
+            port: process.env.DNS_PORT,
             // address: "127.0.0.1",
             type: "udp4"
         },
 
         tcp: {
-            port: 5354,
+            port: process.env.DNS_PORT,
             // address: "127.0.0.1"
         }
     });

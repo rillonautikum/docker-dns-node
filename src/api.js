@@ -21,10 +21,9 @@ if (!isMainThread) {
             const type = "data";
 
             let payload = e.filter(isIncluded).map(container => {
-                // console.log(Object.keys(container.Labels));
                 // return container;
                 const zone = container.Labels["com.docker-dns.domain"];
-                return extract(zone, container.Labels);
+                return extract(zone, container);
             });
 
             
