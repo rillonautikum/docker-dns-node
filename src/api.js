@@ -35,7 +35,6 @@ if (!isMainThread) {
                 // console.log("PAYLOAD", payload);
                 //post new message if hashes dont match
                 //because it indicates an update
-                console.log("pl",payload);
                 parentPort.postMessage(JSON.stringify({
                     type,
                     payload: payload ?? [],

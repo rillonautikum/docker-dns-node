@@ -28,7 +28,6 @@ if (!isMainThread) {
 
             case "data":
                 //write data here
-                console.log("Received Data", m.payload);
                 let config = m.payload.map((v) => {
                     let g = v[0].map(p => {
                         return DnsEntry.fromObject(p).toDnsmasqSetting();
