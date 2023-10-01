@@ -31,7 +31,7 @@ docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docke
 
 Mount tests and run them inside the Container
 ```bash
-docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/src/tests:/usr/src/docker-dns/src/tests docker-dns RUST_BACKTRACE=1 cargo test
+docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/src/tests:/usr/src/docker-dns-node/src/tests docker-dns yarn test
 ```
 
 The Application will detect labels automatically and configure a dnsmasq instance for it. If any changes are made to the labels at runtime docker-dns will pick the changes up and reload the server.
@@ -41,7 +41,9 @@ The Application will detect labels automatically and configure a dnsmasq instanc
 |Label|Description|Value|
 |-|-|-|
 |`com.docker-dns.enabled`|Enables the generation of DNS Records through Docker DNS|any|
-|`com.docker-dns.<type>.<fqdn>`|`<type>` = "a", "aaaa", "cname", "mx", "srv", "txt", `<fqdn>` = test.example.net|This Records content|
+|`com.docker-dns.domain`|Parent Domain|any|
+|`com.docker-dns.<type>.<subdomain_name>`|`<type>` = "a", "aaaa", "cname", "mx", "srv", "txt", `<subdomain_name>` = test|This Records content|
+
 
 
 
@@ -56,8 +58,5 @@ The default Polling Interval for the Docker API is 1 second. You can change this
 ```bash
 # Create the network with VLAN ID 20 for parent interface eth0
 docker network create -d ipvlan --subnet=192.168.20.0/24 --gateway=192.168.20.1 -o parent=eth0.20 ipvlan20
-docker run -d --net=ipvlan20 -it --name nginx --rm --label com.docker-dns.enabled=yes --label com.docker-dns.
+docker run -d --net=ipvlan20 -it --name nginx --rm --label com.docker-dns.enabled=yes --label com.docker-dns.domain=example.net --label com.docker-dns.a.nginx-test --ip 192.168.20.2 nginx
 ```
-
-### Issues
-After an record update the file doesnt get cleaned before hand
