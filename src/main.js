@@ -1,4 +1,5 @@
 import Api from "./api.js";
+
 import DnsmasqProc from './process.js';
 import BuiltinDns from './dns.js';
 
@@ -12,12 +13,11 @@ api_worker.on("message", m => {
     switch (msg.type) {
         case "data":
             console.log("Change Detected");
-            /*if (process.env.USE_BULTIN_SERVER) {
-
+            if (useBuiltinServer()) {
                 BuiltinDns.update(msg);
-            } else {*/
+            } else {
                 DnsmasqProc.update(msg);
-            //}
+            }
             break;
     }
 });
@@ -27,31 +27,35 @@ api_worker.on("error", console.error);
 
 
 let dns_server;
-//if (process.env.USE_BULTIN_SERVER) {
+if (useBuiltinServer()) {
     
 //    console.log("builtin", process.env.USE_BULTIN_SERVER);
     //let dns_server = Dns.start();
-//    dns_server = BuiltinDns.start();
-//} else {
+    dns_server = BuiltinDns.start();
+} else {
     dns_server = DnsmasqProc.start();
-//}
+}
 // dns_server.on("exit", console.debug);
 dns_server.on("error", console.error);
 
 process.on("SIGINT", () => {
-    /*if (process.env.USE_BULTIN_SERVER) {
+    if (useBuiltinServer()) {
         BuiltinDns.stop();
-    } else {*/
+    } else {
         DnsmasqProc.stop();
-    //}
+    }
     Api.stop();
 });
 
 process.on("SIGUSR2", () => {
-    /*if (process.env.USE_BULTIN_SERVER) {
+    if (useBuiltinServer()) {
         BuiltinDns.stop();
-    } else {*/
+    } else {
         DnsmasqProc.stop();
-    //}
+    }
     Api.stop();
 });
+
+function useBuiltinServer() {
+    return process.env.USE_BULTIN_SERVER == "true";
+}

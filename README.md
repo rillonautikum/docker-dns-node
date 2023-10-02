@@ -19,11 +19,17 @@ I wanted to create a Subnet for Docker Apps which I wanted to map on a VLAN. But
 - Swarm Integration
 - Standalone Mode without neccessary Docker Environment
 
-### Installation (Container)
+### Installation (Source)
 Clone this Repo and run the following commands:
 ```bash
 docker build -t docker-dns .
 ```
+
+```bash
+docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock docker-dns:latest
+```
+
+## Installation
 
 ```bash
 docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/rillonautikum/docker-dns:latest

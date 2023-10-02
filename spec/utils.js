@@ -1,1 +1,5 @@
 function mockDockerLabels() {}
+
+function createDockerContainer() {
+    
+}
