@@ -6,6 +6,8 @@ import extract, { DnsEntry } from '../src/parser.js';
 describe("Parser Test Suite", function () {
     it("converts correctly given labels", function () {
         // console.log(this);
+
+        //Overridden IP
         let obj = {
             "com.docker-dns.enabled": "",
             "com.docker-dns.domain": "example.net",
@@ -20,7 +22,12 @@ describe("Parser Test Suite", function () {
         });
 
         let converted = extract("example.net", obj);
-        // console.log(converted);
         expect(converted).toEqual([workingObj]);
     });
 });
+
+describe("Supported DNS Types", () => {
+    it("fail on an unsupported type", () => {
+
+    });
+})

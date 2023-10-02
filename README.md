@@ -19,19 +19,25 @@ I wanted to create a Subnet for Docker Apps which I wanted to map on a VLAN. But
 - Swarm Integration
 - Standalone Mode without neccessary Docker Environment
 
-### Installation (Container)
+### Installation (Source)
 Clone this Repo and run the following commands:
 ```bash
 docker build -t docker-dns .
 ```
 
 ```bash
-docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock docker-dns
+docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock docker-dns:latest
+```
+
+## Installation
+
+```bash
+docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/rillonautikum/docker-dns:latest
 ```
 
 Mount tests and run them inside the Container
 ```bash
-docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/src/tests:/usr/src/docker-dns-node/src/tests docker-dns yarn test
+docker run --cap-add=NET_ADMIN --rm  -p 53:53/udp -p 53:53/tcp -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/src/tests:/usr/src/docker-dns-node/src/tests ghcr.io/rillonautikum/docker-dns:latest yarn test
 ```
 
 The Application will detect labels automatically and configure a dnsmasq instance for it. If any changes are made to the labels at runtime docker-dns will pick the changes up and reload the server.

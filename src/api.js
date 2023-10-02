@@ -68,7 +68,7 @@ function isIncluded(container) {
         )
 }
 
-export function getDockerSocket(url) {
+export function getDockerSocket(url = "/var/run/docker.sock") {
     // URL.
     let dockerUri = new URL.urlToHttpOptions(url);
     return new Dockerode({

@@ -92,7 +92,7 @@ export default {
     },
     update: function (data) {
         if (!this.worker) throw new Error("No running worker was found");
-        console.log(data);
+        //console.log(data);
         this.worker.postMessage(JSON.stringify(data));
     }
 }
